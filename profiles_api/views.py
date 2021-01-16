@@ -3,8 +3,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 
 from profiles_api import serializers
+from profiles_api import models
+from profiles_api import permissions
 
 
 class HelloApiView(APIView):
@@ -100,3 +103,13 @@ class HelloViewSet(viewsets.ViewSet):
         """Handle removing an object"""
 
         return Response({'http_method': 'DELETE'})
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle creating, creating and updating profiles"""
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
+    """ Determines type of authentication for the user i.e. using a token"""
+    authentication_classes = (TokenAuthentication,)
+    """ Determines what actions the user has permissions to perform"""
+    """ Obviously, a particular user can only update their own profile"""
+    permission_classes = (permissions.UpdateOwnProfile,)
