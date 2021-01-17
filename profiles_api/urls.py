@@ -12,6 +12,7 @@ router.register('hello-viewset', views.HelloViewSet, base_name='hello-viewset')
 
 """ Don't need to specify base_name because this is based on a ModelViewSet"""
 router.register('profile', views.UserProfileViewSet)
+router.register('feed', views.UserProfileFeedViewSet)
 
 
 urlpatterns = [

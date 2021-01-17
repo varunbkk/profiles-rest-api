@@ -37,3 +37,14 @@ class UserProfileSerializer(serializers.ModelSerializer):
             instance.set_password(password)
 
         return super().update(instance, validated_data)
+
+class ProfileFeedItemSerializer(serializers.ModelSerializer):
+    """Serializes profile feed items"""
+
+    class Meta:
+        model = models.ProfileFeedItem
+        fields = ('id', 'user_profile', 'status_text', 'created_on')
+        """We don't want one user to be able to create a profile feed item for other user"""
+        """This is to say that a profile feed item can only be created by an authenticated profile/user -> feed item for their own profile"""
+        """So we the user_profile variable to read only"""
+        extra_kwargs = {'user_profile':{'read_only': True}}

@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
+"""Used to retrieve settings from settings.py file"""
+from django.conf import settings
 
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
@@ -56,3 +58,23 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Return string representation of our user"""
         return self.email# Create your models here.
+
+class ProfileFeedItem(models.Model):
+    """Profile status update"""
+    """Link one model to another using foreign key"""
+    """We need to link this with the user profile model above"""
+
+    user_profile = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+
+    """Tells Django what to do if a user profile, for which a feed is being created, was deleted"""
+    """Will cascade down and remove all associated feed items, for that deleted user profile"""
+
+    """Content of the feed update"""
+    status_text = models.CharField(max_length=255)
+
+    """Automatically add the date/time stamp whenever a new feed item is created"""
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        """Returns model as a string"""
+        return self.status_text
